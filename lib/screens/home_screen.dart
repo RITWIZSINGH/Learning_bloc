@@ -13,21 +13,32 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          //It makes the UI according to the context and state provided to it 
-          //whereas BlocListener can be used to show dialogue boxes , navigate to different pages
-          child: BlocBuilder<InternetBloc, InternetState>(
+          child: BlocConsumer<InternetBloc, InternetState>(
+            //BlocListener works in the background
+            listener: (context, state) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Internet Connected"),
+                backgroundColor: Colors.green,
+              ));
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text("Internet not Connected"),
+                backgroundColor: Colors.red,
+              ));
+            },
+            //BlockBuilder makes the UI
             builder: (context, state) {
-              
-              if (state is InternetGainedState){
+              if (state is InternetGainedState) {
                 return Text("Connected!");
-              }
-              else if(state is InternetLostState){
+              } else if (state is InternetLostState) {
                 return Text("Not Connected!");
-              }else {
+              } else {
                 return Text("Loading...");
               }
             },
           ),
+          //It makes the UI according to the context and state provided to it
+          //whereas BlocListener can be used to show dialogue boxes , navigate to different pages
+          //BlocConsumer is a mixture of both
         ),
       ),
     );
