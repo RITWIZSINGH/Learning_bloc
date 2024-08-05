@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:learning_bloc/bloc/internet_bloc/internet_bloc.dart';
+import 'package:learning_bloc/cubit/internet_cubit.dart';
 import 'screens/home_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,7 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //BlocProvider is set as a parent to materialApp cause it can  give data to its children 
     return BlocProvider(
-      create: (context) => InternetBloc(),
+      create: (context) => InternetCubit(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         home: const HomeScreen(),

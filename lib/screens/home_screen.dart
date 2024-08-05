@@ -1,9 +1,11 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, duplicate_import, unused_import
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:learning_bloc/bloc/internet_bloc/internet_bloc.dart';
 import 'package:learning_bloc/bloc/internet_bloc/internet_state.dart';
+import 'package:learning_bloc/cubit/internet_cubit.dart';
+import 'package:learning_bloc/cubit/internet_cubit.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -13,23 +15,27 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: BlocConsumer<InternetBloc, InternetState>(
+          child: BlocConsumer<InternetCubit, InternetState>(
             //BlocListener works in the background
             listener: (context, state) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Internet Connected"),
-                backgroundColor: Colors.green,
-              ));
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text("Internet not Connected"),
-                backgroundColor: Colors.red,
-              ));
+              if (state == InternetState.Gained) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Internet Connected"),
+                  backgroundColor: Colors.green,
+                ));
+              } else if (state == InternetState.Lost) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text("Internet not Connected"),
+                  backgroundColor: Colors.red,
+                ));
+              }
             },
             //BlockBuilder makes the UI
             builder: (context, state) {
-              if (state is InternetGainedState) {
+              if (state == InternetState.Gained) {
                 return Text("Connected!");
-              } else if (state is InternetLostState) {
+              } else if (state == InternetState.Lost) {
+                //In cubit we use '==' in place of 'is'
                 return Text("Not Connected!");
               } else {
                 return Text("Loading...");
